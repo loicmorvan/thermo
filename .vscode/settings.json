@@ -1,0 +1,9 @@
+{
+    "idf.adapterTargetName": "esp32",
+    "files.exclude": {
+        ".vscode/": true,
+        "build/": true,
+        "main/zap-generated/": true,
+        "managed_components/": true
+    }
+}
