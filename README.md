@@ -1,3 +1,13 @@
+# Map
+
+- 1 temperature sensor (temperature_sensor_endpoint).
+- 1 button to reopen commissioning window (tap) or totally reset the device (long).
+
+
+
+
+
+
 # Light
 
 This example creates a Color Temperature Light device using the ESP
