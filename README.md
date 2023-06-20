@@ -2,10 +2,8 @@
 
 - 1 temperature sensor (temperature_sensor_endpoint).
 - 1 button to reopen commissioning window (tap) or totally reset the device (long).
-
-
-
-
+- 1 PWM LED for punctual information.
+- 1 battery with voltage for charge tracking.
 
 
 # Light

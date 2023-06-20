@@ -4,7 +4,9 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/Users/loic/esp/esp-matter/components/**"
+                "/Users/loic/esp/esp-idf/components/**",
+                "/Users/loic/esp/esp-matter/components/**",
+                "/Users/loic/esp/esp-matter/connectedhomeip/connectedhomeip/zzz_generated/app-common/app-common/zap-generated/**"
             ],
             "defines": [],
             "macFrameworkPath": [
