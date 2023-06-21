@@ -11,34 +11,7 @@
 #include <esp_err.h>
 #include <esp_matter.h>
 
-/** Standard max values (used for remapping attributes) */
-#define STANDARD_BRIGHTNESS 100
-#define STANDARD_HUE 360
-#define STANDARD_SATURATION 100
-#define STANDARD_TEMPERATURE_FACTOR 1000000
-
-/** Matter max values (used for remapping attributes) */
-#define MATTER_BRIGHTNESS 254
-#define MATTER_HUE 254
-#define MATTER_SATURATION 254
-#define MATTER_TEMPERATURE_FACTOR 1000000
-
-/** Default attribute values used during initialization */
-#define DEFAULT_POWER true
-#define DEFAULT_BRIGHTNESS 64
-#define DEFAULT_HUE 128
-#define DEFAULT_SATURATION 254
-
 typedef void *app_driver_handle_t;
-
-/** Initialize the light driver
- *
- * This initializes the light driver associated with the selected board.
- *
- * @return Handle on success.
- * @return NULL in case of failure.
- */
-app_driver_handle_t app_driver_light_init();
 
 /** Initialize the button driver
  *

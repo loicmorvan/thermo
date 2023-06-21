@@ -156,10 +156,14 @@ extern "C" void app_main()
     }
 
     /* Starting driver with default values */
-    auto cluster = cluster::get(endpoint, TemperatureMeasurement::Id);
-    auto attribute = attribute::get(cluster, TemperatureMeasurement::Attributes::MeasuredValue::Id);
-    esp_matter_attr_val_t val = esp_matter_invalid(nullptr);
+    auto cluster_id = TemperatureMeasurement::Id;
+    auto attribute_id = TemperatureMeasurement::Attributes::MeasuredValue::Id;
+    auto cluster = cluster::get(endpoint, cluster_id);
+    auto attribute = attribute::get(cluster, attribute_id);
+    auto val = esp_matter_invalid(nullptr);
     attribute::get_val(attribute, &val);
+    val.val.f = 20.0f;
+    attribute::update(light_endpoint_id, cluster_id, attribute_id, &val);
 
 #if CONFIG_ENABLE_CHIP_SHELL
     esp_matter::console::diagnostics_register_commands();

@@ -22,36 +22,6 @@ using namespace esp_matter;
 static const char *TAG = "app_driver";
 extern uint16_t light_endpoint_id;
 
-/* Do any conversions/remapping for the actual value here */
-static esp_err_t app_driver_light_set_power(led_driver_handle_t handle, esp_matter_attr_val_t *val)
-{
-    return led_driver_set_power(handle, val->val.b);
-}
-
-static esp_err_t app_driver_light_set_brightness(led_driver_handle_t handle, esp_matter_attr_val_t *val)
-{
-    int value = REMAP_TO_RANGE(val->val.u8, MATTER_BRIGHTNESS, STANDARD_BRIGHTNESS);
-    return led_driver_set_brightness(handle, value);
-}
-
-static esp_err_t app_driver_light_set_hue(led_driver_handle_t handle, esp_matter_attr_val_t *val)
-{
-    int value = REMAP_TO_RANGE(val->val.u8, MATTER_HUE, STANDARD_HUE);
-    return led_driver_set_hue(handle, value);
-}
-
-static esp_err_t app_driver_light_set_saturation(led_driver_handle_t handle, esp_matter_attr_val_t *val)
-{
-    int value = REMAP_TO_RANGE(val->val.u8, MATTER_SATURATION, STANDARD_SATURATION);
-    return led_driver_set_saturation(handle, value);
-}
-
-static esp_err_t app_driver_light_set_temperature(led_driver_handle_t handle, esp_matter_attr_val_t *val)
-{
-    uint32_t value = REMAP_TO_RANGE_INVERSE(val->val.u16, STANDARD_TEMPERATURE_FACTOR);
-    return led_driver_set_temperature(handle, value);
-}
-
 static void app_driver_button_toggle_cb(void *arg, void *data)
 {
     ESP_LOGI(TAG, "Toggle button pressed");
@@ -78,34 +48,26 @@ esp_err_t app_driver_attribute_update(app_driver_handle_t driver_handle, uint16_
 
     esp_err_t err = ESP_OK;
     if (endpoint_id == light_endpoint_id) {
-        led_driver_handle_t handle = (led_driver_handle_t)driver_handle;
-        if (cluster_id == OnOff::Id) {
-            if (attribute_id == OnOff::Attributes::OnOff::Id) {
-                err = app_driver_light_set_power(handle, val);
-            }
-        } else if (cluster_id == LevelControl::Id) {
-            if (attribute_id == LevelControl::Attributes::CurrentLevel::Id) {
-                err = app_driver_light_set_brightness(handle, val);
-            }
-        } else if (cluster_id == ColorControl::Id) {
-            if (attribute_id == ColorControl::Attributes::CurrentHue::Id) {
-                err = app_driver_light_set_hue(handle, val);
-            } else if (attribute_id == ColorControl::Attributes::CurrentSaturation::Id) {
-                err = app_driver_light_set_saturation(handle, val);
-            } else if (attribute_id == ColorControl::Attributes::ColorTemperatureMireds::Id) {
-                err = app_driver_light_set_temperature(handle, val);
-            }
-        }
+        // led_driver_handle_t handle = (led_driver_handle_t)driver_handle;
+        // if (cluster_id == OnOff::Id) {
+        //     if (attribute_id == OnOff::Attributes::OnOff::Id) {
+        //         err = app_driver_light_set_power(handle, val);
+        //     }
+        // } else if (cluster_id == LevelControl::Id) {
+        //     if (attribute_id == LevelControl::Attributes::CurrentLevel::Id) {
+        //         err = app_driver_light_set_brightness(handle, val);
+        //     }
+        // } else if (cluster_id == ColorControl::Id) {
+        //     if (attribute_id == ColorControl::Attributes::CurrentHue::Id) {
+        //         err = app_driver_light_set_hue(handle, val);
+        //     } else if (attribute_id == ColorControl::Attributes::CurrentSaturation::Id) {
+        //         err = app_driver_light_set_saturation(handle, val);
+        //     } else if (attribute_id == ColorControl::Attributes::ColorTemperatureMireds::Id) {
+        //         err = app_driver_light_set_temperature(handle, val);
+        //     }
+        // }
     }
     return err;
-}
-
-app_driver_handle_t app_driver_light_init()
-{
-    /* Initialize led */
-    led_driver_config_t config = led_driver_get_config();
-    led_driver_handle_t handle = led_driver_init(&config);
-    return (app_driver_handle_t)handle;
 }
 
 app_driver_handle_t app_driver_button_init()
