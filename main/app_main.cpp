@@ -102,6 +102,21 @@ static void on_event(const ChipDeviceEvent *event, intptr_t arg)
     }
 }
 
+static void timerCallback(void* args)
+{
+    ESP_LOGI(TAG, "Timer!");
+    auto cluster_id = TemperatureMeasurement::Id;
+    auto attribute_id = TemperatureMeasurement::Attributes::MeasuredValue::Id;
+    auto node = node::get();
+    auto endpoint = endpoint::get(node, light_endpoint_id);
+    auto cluster = cluster::get(endpoint, cluster_id);
+    auto attribute = attribute::get(cluster, attribute_id);
+    auto val = esp_matter_invalid(nullptr);
+    attribute::get_val(attribute, &val);
+    val.val.i16 = 15;
+    attribute::update(light_endpoint_id, cluster_id, attribute_id, &val);
+}
+
 static esp_err_t app_identification_cb(identification::callback_type_t type, uint16_t endpoint_id, uint8_t effect_id,
                                        uint8_t effect_variant, void *priv_data)
 {
@@ -162,8 +177,19 @@ extern "C" void app_main()
     auto attribute = attribute::get(cluster, attribute_id);
     auto val = esp_matter_invalid(nullptr);
     attribute::get_val(attribute, &val);
-    val.val.f = 20.0f;
+    val.val.i16 = 20.0f;
     attribute::update(light_endpoint_id, cluster_id, attribute_id, &val);
+
+    esp_timer_create_args_t timer_args = {
+        .callback = &timerCallback,
+        .arg = nullptr,
+        .dispatch_method = ESP_TIMER_TASK,
+        .name = "Auto-update temperature",
+        .skip_unhandled_events = true
+    };
+    esp_timer_handle_t timer;
+    err = esp_timer_create(&timer_args, &timer);
+    esp_timer_start_periodic(timer, 1000000);
 
 #if CONFIG_ENABLE_CHIP_SHELL
     esp_matter::console::diagnostics_register_commands();
